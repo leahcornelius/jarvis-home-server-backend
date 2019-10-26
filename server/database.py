@@ -1,4 +1,5 @@
 import mysql.connector
+import time
 
 def init():
     mydb = mysql.connector.connect(
@@ -19,6 +20,15 @@ def start():
         database="jarvis"
     )
     return mydb
+
+def add_user(email, password,phone,phone_code,email_code,phone_ver_state,email_ver_state):
+    time = time.time()
+    db = start()
+    mycursor = mydb.cursor()
+    sql = "INSERT INTO users (email, password,devices,created_at,last_login,failed_login_attempts,email_code,phone_number,phone_code,email_verifyed,phone_verifyed) VALUES (%s, %s)"
+    val = (email, password,0,time,time,0,email_code,phone,phone_code,phone_ver_state,email_ver_state)
+    mycursor.execute(sql, val)
+    mydb.commit()
 
 def test_db_integrity():
     print("WARNING: This will take a LONG time and during this test all services provided by this server will be unavalable")
